@@ -1,38 +1,43 @@
-import React from 'react';
-import { ArrowRight, Phone } from 'lucide-react';
+import React, { Suspense, lazy } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import EmergencyBanner from './EmergencyBanner';
-import ConversionPathRouter from './ConversionPathRouter';
 import AnimatedSection from './AnimatedSection';
+import PerformanceOptimizedButton from './PerformanceOptimizedButton';
 import AnimatedCounter from './AnimatedCounter';
 
-const Hero = () => {
+// Lazy load heavy components
+const EmergencyBanner = lazy(() => import('./EmergencyBanner'));
+const ConversionPathRouter = lazy(() => import('./ConversionPathRouter'));
+
+const OptimizedHero = () => {
   return (
     <div className="relative">
-      {/* Header takes top-most position (z-[60]) */}
-      {/* Emergency Banner positioned below header - ONLY ON HOME PAGE */}
-      <div className="fixed top-16 sm:top-20 left-0 right-0 z-[40]">
-        <EmergencyBanner 
-          show={true} 
-          message="Active Crisis Situation?" 
-          subMessage="Get immediate expert support" 
-          variant="emergency" 
-        />
-      </div>
+      {/* Emergency Banner - Lazy loaded */}
+      <Suspense fallback={null}>
+        <div className="fixed top-16 sm:top-20 left-0 right-0 z-[40]">
+          <EmergencyBanner 
+            show={true} 
+            message="Active Crisis Situation?" 
+            subMessage="Get immediate expert support" 
+            variant="emergency" 
+          />
+        </div>
+      </Suspense>
 
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Parallax Background */}
+        {/* Optimized Background - No fixed attachment on mobile */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20" 
+          className="absolute inset-0 bg-cover bg-center opacity-20 will-change-transform"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80')`
-          }} 
+            backgroundImage: `url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')`,
+            backgroundAttachment: window.innerWidth > 768 ? 'fixed' : 'scroll'
+          }}
         />
 
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-dark-background/90 via-dark-background/80 to-primary-blue/20" />
 
-        {/* Content - Mobile First - Add top padding to account for header + banner */}
+        {/* Content - Staggered animations */}
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-32 sm:pt-36">
           
           <AnimatedSection animation="fade-up" delay={200}>
@@ -51,7 +56,7 @@ const Hero = () => {
             </p>
           </AnimatedSection>
 
-          {/* Authority Indicators */}
+          {/* Authority Indicators with Animated Counters */}
           <AnimatedSection animation="scale" delay={600}>
             <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-dark-background/70 rounded-xl border border-primary-blue/30 backdrop-blur-sm">
               <p className="text-lg sm:text-xl text-gray-300 mb-3 sm:mb-4">
@@ -65,7 +70,9 @@ const Hero = () => {
                   <div className="text-gray-400 text-xs sm:text-sm">Professionals Trained</div>
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-bold text-primary-blue">Hundreds</div>
+                  <div className="text-xl sm:text-2xl font-bold text-primary-blue">
+                    <AnimatedCounter end="Hundreds" />
+                  </div>
                   <div className="text-gray-400 text-xs sm:text-sm">Incidents Managed</div>
                 </div>
                 <div>
@@ -80,9 +87,16 @@ const Hero = () => {
             </div>
           </AnimatedSection>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Lazy loaded */}
           <AnimatedSection animation="fade-up" delay={800}>
-            <ConversionPathRouter variant="default" size="large" />
+            <Suspense fallback={
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="bg-primary-red text-white px-8 py-4 rounded-lg animate-pulse">Loading...</div>
+                <div className="bg-transparent border-2 border-primary-blue text-primary-blue px-8 py-4 rounded-lg animate-pulse">Loading...</div>
+              </div>
+            }>
+              <ConversionPathRouter variant="default" size="large" />
+            </Suspense>
           </AnimatedSection>
 
           {/* Professional Value Indicator */}
@@ -95,11 +109,11 @@ const Hero = () => {
           </AnimatedSection>
         </div>
 
-        {/* Scroll Indicator - Hidden on mobile */}
+        {/* Scroll Indicator - Hidden on mobile, optimized */}
         <AnimatedSection 
           animation="fade" 
           delay={1200}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden sm:block"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
         >
           <div className="w-6 h-10 border-2 border-light-text/50 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-light-text/50 rounded-full mt-2 animate-pulse" />
@@ -110,4 +124,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default OptimizedHero;

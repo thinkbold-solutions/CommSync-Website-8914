@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Users, Briefcase, BookOpen, Megaphone, Target, ArrowRight } from 'lucide-react';
+import AnimatedSection from './AnimatedSection';
 
 const Services = () => {
   const services = [
@@ -45,23 +46,23 @@ const Services = () => {
   return (
     <section id="services" className="py-16 sm:py-20 bg-gray-900/50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 sm:mb-16" data-aos="fade-up">
+        <AnimatedSection animation="fade-up" className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-primary font-bold mb-4 sm:mb-6">
             Our <span className="text-gradient">Services</span>
           </h2>
           <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
             Comprehensive solutions for all your public information and strategic communication needs.
           </p>
-        </div>
-        
+        </AnimatedSection>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
-              <div
+              <AnimatedSection
                 key={index}
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
+                animation="fade-up"
+                delay={index * 100}
                 className="group bg-dark-background border border-gray-accents rounded-xl p-4 sm:p-6 hover:border-primary-blue transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl"
               >
                 <div className="mb-3 sm:mb-4">
@@ -76,14 +77,14 @@ const Services = () => {
                 <p className="text-gray-300 leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
                   {service.description}
                 </p>
-                <Link
-                  to={service.link}
+                <Link 
+                  to={service.link} 
                   className="inline-flex items-center space-x-2 text-primary-red hover:text-primary-blue transition-colors duration-300 font-medium text-sm sm:text-base"
                 >
                   <span>Learn More</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
-              </div>
+              </AnimatedSection>
             );
           })}
         </div>

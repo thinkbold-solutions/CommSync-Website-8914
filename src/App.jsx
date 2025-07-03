@@ -17,23 +17,44 @@ import './App.css';
 // Component to handle scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  
+
   return null;
 };
 
 function App() {
   useEffect(() => {
-    // Initialize AOS only if it's available
-    if (typeof window !== 'undefined' && window.AOS) {
-      window.AOS.init({
-        duration: 1000,
-        once: true,
-        offset: 100,
+    // Initialize performance optimizations
+    if (typeof window !== 'undefined') {
+      // Preconnect to external domains
+      const preconnectLinks = [
+        'https://fonts.googleapis.com',
+        'https://fonts.gstatic.com',
+        'https://images.unsplash.com'
+      ];
+      
+      preconnectLinks.forEach(href => {
+        const existingLink = document.querySelector(`link[href="${href}"]`);
+        if (!existingLink) {
+          const link = document.createElement('link');
+          link.rel = 'preconnect';
+          link.href = href;
+          document.head.appendChild(link);
+        }
       });
+
+      // Initialize AOS if available (fallback)
+      if (window.AOS) {
+        window.AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100,
+          easing: 'ease-out-cubic'
+        });
+      }
     }
   }, []);
 

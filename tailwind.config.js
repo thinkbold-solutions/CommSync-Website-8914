@@ -42,12 +42,17 @@ export default {
         },
         gradientPulse: {
           '0%, 100%': { 
-            filter: 'brightness(1.2) saturate(1.3) drop-shadow(0 0 8px rgba(255, 0, 51, 0.3))',
+            filter: 'brightness(1.2) saturate(1.3) drop-shadow(0 0 8px rgba(255,0,51,0.3))',
           },
           '50%': { 
-            filter: 'brightness(1.8) saturate(1.8) drop-shadow(0 0 16px rgba(0, 102, 255, 0.4))',
+            filter: 'brightness(1.8) saturate(1.8) drop-shadow(0 0 16px rgba(0,102,255,0.4))',
           },
         }
+      },
+      transitionDuration: {
+        '600': '600ms',
+        '700': '700ms',
+        '800': '800ms',
       }
     },
   },
